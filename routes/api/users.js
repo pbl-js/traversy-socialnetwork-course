@@ -73,14 +73,13 @@ router.post(
 
       jwt.sign(
         payload,
-        config.get("jwtSectret"),
-        { expiresIn: 3600000 },
+        config.get("jwtSecret"),
+        { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
           res.json({ token });
         }
       );
-      res.send("User registered");
     } catch (err) {
       console.error(err.message);
       res.status(500).send("server error");
