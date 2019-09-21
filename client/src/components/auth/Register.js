@@ -1,12 +1,12 @@
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
 import { setAlert } from "../../actions/alert";
 import { register } from "../../actions/auth";
 
-const Register = ({ setAlert, register }) => {
+const Register = ({ setAlert, register, isAuthentidated }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,6 +15,10 @@ const Register = ({ setAlert, register }) => {
   });
 
   const { name, email, password, password2 } = formData;
+
+  if (isAuthentidated) {
+    return <Redirect to="/dashboard" />;
+  }
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -86,10 +90,15 @@ const Register = ({ setAlert, register }) => {
 
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
-  register: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired,
+  isAuthentidated: PropTypes.bool
 };
 
+const mapStateToProps = state => ({
+  isAuthentidated: state.auth.isAuthentidated
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { setAlert, register }
 )(Register);
